@@ -1,0 +1,192 @@
+package com.shop.services;
+
+import java.util.Scanner;
+
+import com.shop.model.Goods;
+
+public class GoodsService {
+
+	Goods goods[] = new Goods [10] ;
+	
+	/**
+	 * 商品查重名字
+	 * @param checknum
+	 * @return true注册进行下去，false 商品编号重复
+	 */
+	public boolean registerCheck(int checknum){
+		for(int i=0;i<goods.length;i++){ 
+			if(goods[i] == null){
+				return true;
+				//break;
+			}else{
+				if(checknum == goods[i].getNum()){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * 将商品添加到数组
+	 * @param addnum
+	 * @param addgoodsname
+	 * @param addprice
+	 * @return true添加成功 false 没空间
+	 */
+	public boolean add(int addnum,String addgoodsname,int addprice){
+		for(int i=0;i<goods.length;i++){
+			if(goods[i]==null){//空间
+				goods[i] = new Goods(addnum,addgoodsname,addprice);
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * 将商品删除
+	 * @param addnum 编号
+	 * @return
+	 */
+	public boolean delete(int addnum){
+		for(int i=0;i<goods.length;i++){
+			if(goods[i]!=null && goods[i].getNum()==addnum){//空间
+//				goods[i]=new Goods();
+				goods[i]=null;
+				return true;
+			}
+		}
+		return false;
+	}
+	 
+	/**
+	 * 修改
+	 * @param addnum
+	 * @param addgoodsname
+	 * @param addprice
+	 * @return true添加成功 false 没空间
+	 */
+	public boolean update(int addnum){
+		for(int i=0;i<goods.length;i++){
+			if(goods[i] !=null){//空间
+//				System.out.println(goods[i].getNum()+"+++++++++++++++++++++++得到的num");
+				if(addnum==goods[i].getNum()){
+					boolean isbreak=true;
+					String no;
+					String addgoodsname;
+					int addprice;
+					
+					while(isbreak){
+						System.out.println("输入需要修改的信息：1商品名称  2价格 3退出");
+						System.out.println("输入序号：");
+						Scanner sc= new Scanner(System.in);
+						no=sc.next();
+						switch(no){
+						case "1":
+							System.out.println("输入商品名称 :");
+							addgoodsname=sc.next();
+							goods[i]= new Goods(goods[i].getNum(),addgoodsname,goods[i].getPrice());
+							System.out.println("名称修改完成...");
+							return true;
+						case "2":
+							System.out.println("输入价格 :");
+							addprice=sc.nextInt();
+							goods[i]= new Goods(goods[i].getNum(),goods[i].getGoodsName(),addprice);
+							System.out.println("价格修改完成...");
+							return true;
+						case "3":
+							System.out.println("退出修改...");
+							isbreak=false;
+							break;
+						}
+					}
+					
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * 显示所有商品
+	 */
+	public void show(){
+		for(int i=0;i<goods.length;i++){ 
+			if(goods[i] != null){
+				System.out.println("第"+(i+1)+"个商品："+"  【 商品编号 】  ："+goods[i].getNum()+"  【 商品名称 】  ："+goods[i].getGoodsName()+"  【 价格 】  ："+goods[i].getPrice());
+			}
+		}
+	}
+	/**
+	 * 
+	 * @param goodsnum
+	 * @return
+	 */
+	public String showname(int goodsnum){
+		for(int i=0;i<goods.length;i++){ 
+			if(goods[i] != null){
+				if(goods[i].getNum()==goodsnum){
+					return goods[i].getGoodsName();
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * 从购物车过来，通过编号，查到所有购买的商品
+	 * @param goodsNum
+	 */
+	public void showshopcar(int goodsNum) {
+		for(int i=0;i<goods.length;i++){
+			System.out.println("您购买的第"+(i+1)+"个商品："+"  【 商品编号 】  ："+goods[i].getNum()+"  【 商品名称 】  ："+goods[i].getGoodsName()+"  【 价格 】  ："+goods[i].getPrice());
+			/*if(goods[i] != null){
+				if(goodsNum==goods[i].getNum()){
+					System.out.println("您购买的第"+(i+1)+"个商品："+"  【 商品编号 】  ："+goods[i].getNum()+"  【 商品名称 】  ："+goods[i].getGoodsName()+"  【 价格 】  ："+goods[i].getPrice());
+				}
+			}*/
+			
+		}
+	}
+	/**
+	 * 
+	 * @param name获取名称 模糊查询 
+	 * @return
+	 */
+	public void checkname(String name){
+		for(int i=0;i<goods.length;i++){
+			if(goods[i] != null){
+				int tag=0;//索引，出现的位置
+				tag = name.indexOf(goods[i].getGoodsName());// 电脑  联想电脑
+				if(tag != -1 ){
+					for(int j=0;j<goods.length;j++){
+						if(goods[j] != null){
+							if(goods[i].getGoodsName().equals(goods[j].getGoodsName())){
+								System.out.println("  【 商品编号 】  ："+goods[j].getNum()+"  【 商品名称 】  ："+goods[j].getGoodsName()+"  【 价格 】  ："+goods[j].getPrice());
+							}
+						} 
+					}
+					break;
+				}else{
+					System.out.println("找不到该名称的商品");
+				}
+			}else{
+				System.out.println("无商品");
+			}
+		} 
+	}
+	
+	/**
+	 * 录入编号查找商品
+	 * @param goodsNum
+	 * true,找到该商品，false 找不到
+	 */
+	public boolean checknum(int goodsNum) {
+		for(int i=0;i<goods.length;i++){
+			if(goods[i] != null){
+				if(goodsNum==goods[i].getNum()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}
