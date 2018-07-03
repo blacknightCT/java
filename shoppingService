@@ -1,0 +1,72 @@
+package com.shop.services;
+
+import com.shop.model.Shopping;
+
+public class shoppingService {
+	Shopping shopcar [] = new Shopping[10];
+	GoodsService gs_shop=new GoodsService();
+	Shopping shopcar_num [] = new Shopping [5];
+	
+	/**
+	 * 实现购买，加到购物车
+	 * @param add_username购买者账号
+	 * @param add_goodsnum商品编号
+	 */
+	public boolean add_shopcar(String username,int goodsnum ,String goodsname){
+		for(int i=0;i<shopcar.length;i++){
+			if(shopcar[i]==null){//空间
+				shopcar[i] = new Shopping(username,goodsnum,goodsname);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 展示我的购物车
+	 * 需要购买者名字，去购物车找到他买了什么商品编号 ,,多个编号存在数组里
+	 * 通过这个编号，找到商品名称 
+	 */
+	public int show(String Susername){
+		GoodsService goods = new GoodsService();
+//		int shopcar_num [] = new int [5];
+		int shopcar_num = 0;
+		for(int i=0;i<shopcar.length;i++){
+			if(shopcar[i] != null){
+				if(Susername.equals(shopcar[i].getName())){
+					/*for(int j=0;j<5;j++){
+						shopcar_num[i]=shopcar[i].getNum();
+						return shopcar_num[i];
+					}*/
+					/*shopcar_num=shopcar[i].getNum();
+					System.out.println("得到的编号"+shopcar_num);
+					goods.show_shopcar(shopcar_num);*/
+					System.out.println(shopcar[i].getName()+"购买的第"+(i+1)+"个商品："+"  【 商品编号 】  ："+shopcar[i].getNum()+"  【 商品名称 】  ："+shopcar[i].getGoodsname());
+				
+				}
+			}
+		}
+		return 0;
+//		for(int i=0;i<shopcar.length;i++){ 
+//			//goods[0]=new Goods(1,"hello",998);
+//			if(shopcar[i] != null){
+//				System.out.println("第"+(i+1)+"个购买者 ："+"  【 购买者名字 】  ："+shopcar[i].getName()+"  【 商品名称 】  ："+shopcar[i].getNum());
+//			}
+//		}
+	}
+	
+	
+	/**
+	 * 根据购买者名字查找商品编号
+	 * @param shop_username
+	 * @return
+	 */
+	public int check_name(String shop_username){
+		for(int i=0;i<shopcar.length;i++){
+			if(shop_username.equals(shopcar[i].getName())){
+				return shopcar[i].getNum();
+			}
+		}
+		return 0;
+	}
+}
