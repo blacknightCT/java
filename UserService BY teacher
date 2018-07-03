@@ -1,0 +1,102 @@
+package com.links.service;
+
+import com.links.model.User;
+
+public class UserService {
+	private User[] users = new User[10];// 用户的数组
+
+	public UserService(){
+		//初始化用户对象数组，将管理员进行添加
+		users[0]=new User("admin","000000",1);
+	}
+	/**
+	 * 用户的注册方法
+	 * 
+	 * @param userName
+	 *            用户名
+	 * @param passWord
+	 *            密码
+	 * @author create by wuxiaomin 20180627
+	 * @return true:注册成功;false:注册失败
+	 */
+	public boolean regUser(String userName, String passWord) {
+		// 1.找到数组中为null的位置，将新的用户名跟密码保存进去
+		// 2.判断数组中是否存在null的位置，如果不存在，注册的用户已经满了10位用户了，禁止再注册了
+		boolean isOK = false;
+		User user = null;
+		for (int i = 0; i < users.length; i++) {
+			if (users[i] == null) {
+				// 找到了能够存储用户信息的位置
+				user = new User();
+				user.setUserName(userName);
+				user.setPassWord(passWord);
+				user.setType(2);// 普通用户进行注册
+				users[i] = user;
+				isOK = true;
+				return true;
+			}
+		}
+		if (isOK == false) {
+			System.out.println("对不起， 该系统已经满员了，不能再进行注册了，请联系管理员！");
+		}
+		return false;
+	}
+
+	/**
+	 * 验证用户名是否重复
+	 * 
+	 * @param userName
+	 *            用户名
+	 * @author wuxiaomin
+	 * @return true：可以进行注册；false用户名已经存在，禁止注册
+	 */
+	public boolean checkUserName(String userName) {
+		for (int i = 0; i < users.length; i++) {
+			if (users[i] == null) {
+				break;
+			} else {
+				if (userName.equals(users[i].getUserName())) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 用户登录
+	 * 
+	 * @param userName
+	 *            用户名
+	 * @param passWord
+	 *            密码
+	 * @author wuxiaomin
+	 * @return true：登录成功；false登录失败
+	 */
+	public User loginUser(String userName, String passWord) {
+		for (int i = 0; i < users.length; i++) {
+			if (users[i] != null) {
+				if (userName.equals(users[i].getUserName()) && passWord.equals(users[i].getPassWord())) {
+					return users[i];
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 显示数组中所有的用户信息
+	 * 
+	 * @author wuxiaomin
+	 */
+	public void showUsers() {
+		System.out.println("正在加载用户信息列表：");
+		for (int i = 0; i < users.length; i++) {
+			if (users[i] == null) {
+				break;
+			}
+			System.out.println("编号" + (i + 1) + users[i]);
+		}
+		System.out.println("用户信息加载完毕！");
+	}
+}
