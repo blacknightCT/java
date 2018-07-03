@@ -1,0 +1,55 @@
+package com.links.randomTest;
+
+public class RandomTest {
+	static int n = 5;
+	static String name[] = {"a","b","c","d","e","f","g","h","i","j"}; 
+	static String result[] = new String [5];
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int isOK =0;
+		int num = (int) (Math.random() *10);
+		while(isOK < n){
+			if(check(num)){
+				if(add(num)){
+					isOK++;
+					num = (int) (Math.random() *10);
+				}
+			}
+			else{
+				num = (int) (Math.random() *10);
+			}
+		}
+		for(int i=0;i<n;i++){
+			System.out.println(result[i]);
+		}
+	}
+	/**
+	 * 检查值是否重复
+	 * @param num
+	 * @return false 重复,true 可添加
+	 */
+	public static boolean check(int num){
+		for(int i=0;i<n;i++){
+			if(result[i] != null){
+				if(name[num].equals(result[i])){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * 将不重复的值添加到result数组
+	 * @param num
+	 * @return true 添加成功  false失败
+	 */
+	public static boolean add(int num){
+		for(int i=0;i<n;i++){
+			if(result[i] == null){
+				result[i]=name[num];
+				return true;
+			}
+		}
+		return false;
+	}
+}
