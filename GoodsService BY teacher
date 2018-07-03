@@ -1,0 +1,116 @@
+package com.links.service;
+
+import com.links.model.Goods;
+
+public class GoodsService {
+	private Goods[] arrGoods = new Goods[100];
+
+	/**
+	 * 添加商品信息
+	 * 
+	 * @param good
+	 * @return 1:添加成功；2：商品ID已经存在；3：添加失败
+	 */
+	public int createGoods(Goods good) {
+		// 1.check商品数组是否存在当前录入的ID
+		if (getGoodsById(good.getId()) != null) {
+			// 已经存在
+			return 2;
+		}
+		// 2.添加商品
+		for (int i = 0; i < arrGoods.length; i++) {
+			// 2.1check arrGoods是否存在null的位置于保存商品信息
+			if (arrGoods[i] == null) {
+				arrGoods[i] = good;// 添加的商品信息，保存到数据中
+				return 1;
+			}
+		}
+		return 3;
+	}
+
+	/**
+	 * 根据ID删除商品信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean deleteGoodsById(int id) {
+		for (int i = 0; i < arrGoods.length; i++) {
+			if(arrGoods[i]!=null && arrGoods[i].getId()==id){
+				arrGoods[i]=null;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 修改商品信息
+	 * 
+	 * @param good
+	 * @return
+	 */
+	public boolean updateGoods(Goods good) {
+		for (int i = 0; i < arrGoods.length; i++) {
+			if (arrGoods[i] != null && good.getId() == arrGoods[i].getId()) {
+				arrGoods[i] = good;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 根据ID获取商品信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Goods getGoodsById(int id) {
+		for (Goods goods : arrGoods) {
+			if (goods != null && goods.getId() == id) {
+				return goods;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 根据商品名称模糊查询商品信息
+	 * 
+	 * @param goodName
+	 * @return
+	 */
+	public Goods[] getGoodsByGoodName(String goodName) {
+		Goods[] goodInfo = new Goods[100];
+		int index = 0;
+		for (Goods goods : arrGoods) {
+			if (goods != null && goods.getGoodName().indexOf(goodName) > -1) {
+				goodInfo[index] = goods;
+				index++;
+			}
+		}
+		return goodInfo;
+	}
+
+	/**
+	 * 获取商品所有信息
+	 * 
+	 * @return
+	 */
+	public Goods[] getGoods() {
+		return null;
+	}
+
+	/**
+	 * 显示所有商品信息
+	 */
+	public void showAllGoods() {
+		for (Goods goods : arrGoods) {
+			if (goods != null) {
+				System.out.println(goods);
+			}
+		}
+	}
+
+}
