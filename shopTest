@@ -1,0 +1,182 @@
+package com.shop.test;
+
+import java.util.Scanner;
+
+import org.omg.CORBA.PUBLIC_MEMBER;
+
+import com.shop.services.GoodsService;
+import com.shop.services.shoppingService;
+import com.shop.services.userService;
+
+public class shoptest {
+static Scanner sc = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub  
+		userService us=new userService(); 
+		GoodsService gs=new GoodsService();
+		shoppingService ss=new shoppingService();
+		boolean isbreak=true;
+	
+		while(isbreak){
+			System.out.println("1注册  2登录 3show  6退出");
+			System.out.println("输入序号:");
+			String no=sc.next(); 
+			String printname;
+			String printpassword;
+			String printidentity = null;
+			
+			switch(no){
+			case "1":
+				System.out.println("输入用户名:");
+				printname=sc.next(); 
+				
+				if(us.registerCheck(printname)){//名字不重复，下一步输入
+					System.out.println("输入密码:");
+					printpassword=sc.next(); 
+					
+					if(us.add(printname,printpassword,printidentity)){
+						System.out.println("注册成功");
+					}else{
+						System.out.println("注册失败");
+					}
+				}else{
+					System.out.println("用户名重复");
+				}
+				break;
+			case "2":
+				System.out.println("输入用户名:");
+				printname=sc.next(); 
+				System.out.println("输入password:");
+				printpassword=sc.next();
+				if(us.loginCheck(printname,printpassword)){
+					isbreak=false;
+					if(us.idshow(printname).equals("1")){
+						boolean isbreak2=true;
+						
+						int printnum = 0,printprice = 0;
+						String printgoodsname = null , good_type="N";
+						
+						System.out.println("--------------------------管理员界面--------------------------");
+						
+						while(isbreak2){
+							System.out.println("-------------------------------------------------------------");
+							System.out.println("1 商品添加	2商品删除	3商品修改	4查看商品	5退出");
+							System.out.println("输入序号:");
+							String no2=sc.next(); 
+							switch(no2){
+							case "1":
+								System.out.println("商品添加:---");
+								System.out.println("输入商品编号:");
+								printnum=sc.nextInt();
+								if(gs.registerCheck(printnum)){
+									System.out.println("输入商品名称:");
+									printgoodsname=sc.next();
+									System.out.println("输入商品价格:");
+									printprice=sc.nextInt();
+									if(gs.add(printnum, printgoodsname, printprice)){
+										System.out.println("添加成功");
+									}else{
+										System.out.println("添加失败,空间不足");
+									}
+								}else{
+									System.out.println("此商品编号已存在..");
+								} 
+								break;
+							case "2":
+								System.out.println("商品删除:---");
+								System.out.println("输入要删除的商品编号:");
+								printnum=sc.nextInt();
+								System.out.println("确定要删除编号为："+printnum+"的商品吗 ( Y/N)");
+								good_type=sc.next();
+								if(good_type.equals("Y")){
+									gs.delete(printnum);
+								}else if(good_type.equals("N")){
+									break;
+								}
+								break;
+							case "3":
+								System.out.println("商品修改:---");
+								System.out.println("输入要修改的商品编号:");
+								printnum=sc.nextInt();
+//								gs.update(printnum);
+								if(gs.update(printnum)){
+									System.out.println("----------------");
+								}
+								else{
+									System.out.println("输入的编号不存在");
+								}
+								break;
+							case "4":
+								gs.show();
+								break; 
+							case "5":
+								isbreak2=false;
+								System.out.println("退出");
+								isbreak=true;
+								break; 
+							}
+						} 
+					}else{
+						boolean isbreak3=true;
+						int printgoods_num;//按编号搜索
+						String printgoods_name;//按名称搜索
+						while(isbreak3){
+							System.out.println("--------------------------用户界面--------------------------");
+							System.out.println("1商品购买  2商品搜索   3我的购物车 4退出");
+							System.out.println("输入序号:");
+							String no2=sc.next(); 
+							switch(no2){
+							case "1":
+								System.out.println("商品购买");
+								System.out.println("输入要购买的商品的编号：");
+								printgoods_num=sc.nextInt();
+								if(gs.checknum(printgoods_num)){
+									if(ss.add_shopcar(printname, printgoods_num,gs.showname(printgoods_num))){//printname当前用户名字
+										System.out.println("已添加至购物车");
+									}else{
+										System.out.println("添加失败");
+									} 
+								}else {
+									System.out.println("查无此商品");
+								}
+								
+								break;
+							case "2":
+								System.out.println("商品搜索");
+								System.out.println("输入要搜索的商品名称："); 
+								printgoods_name=sc.next();
+								gs.checkname(printgoods_name);
+								break;
+							case "3":
+								System.out.println("我的购物车");
+//								int shopcar_no [] = new int [5];
+//								shopcar_no[1] = ss.show(printname)[1]; 
+//								if(ss.show(printname) != 0){
+//									gs.show_shopcar(ss.show(printname));
+//								}
+								ss.show(printname); 
+								break;
+							case "4":
+								isbreak3=false;
+								System.out.println("退出");
+								isbreak=true;
+								break; 
+							}
+						} 
+					} 
+				}else{
+					System.out.println("登录失败");
+				} 
+				break;
+			case "3":
+				us.show();
+				break;
+			case "4":
+				isbreak=false;
+				System.out.println("退出...");
+				break; 
+			} 
+		} 
+	}
+}
