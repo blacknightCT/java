@@ -1,0 +1,141 @@
+package com.shop.services;
+
+import com.shop.model.User;
+
+public class userService {
+	
+	User user[] = new User [10] ;
+	int type;
+	/**
+	 * 注册信息
+	 * @param checkname
+	 * @return true注册进行下去，false 用户名重复
+	 */
+	public boolean registerCheck(String checkname){
+		for(int i=0;i<10;i++){
+			user[0]=new User("admin","1","1");
+			if(user[i] == null){
+				return true;
+				//break;
+			}else{
+				if(checkname.equals(user[i].getName())){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * 将注册信息添加到数组
+	 * @param addname
+	 * @param addpassword
+	 * @param addidentify
+	 * @return true添加成功 false 没空间
+	 */
+	public boolean add(String addname,String addpassword,String addidentify){
+		user[0]=new User("admin","1","1");
+		for(int i=0;i<10;i++){
+			if(user[i]==null){//空间
+				user[i] = new User(addname,addpassword,"2");
+				return true;
+			}
+		}
+		return false;
+	}
+	 
+	/**
+	 * 添加成功之后登录,检查用户名密码
+	 * @param loginname
+	 * @param loginpassword
+	 * @param loginidentity
+	 * @return true登录成功，记录type ,false登录失败
+	 */
+	public  boolean loginCheck(String loginname,String loginpassword){
+		user[0]=new User("admin","1","1");
+		user[1]=new User("1","1","2");
+//		int type;
+		for(int i=0;i<10;i++){
+			if(user[i] != null){
+				if(user[i].getName().equals(loginname) && user[i].getPassword().equals(loginpassword) ){//登录判断，记录身份，用type保存
+					/*if(user[i].getIdentity().equals("1")){
+						user[i].setType(1);
+					}else{
+						user[i].setType(2);
+					}*/
+					return true;
+				}
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+/**
+ * 
+ * @param userName
+ * @param passWord
+ * @return
+ */
+	public User loginUser(String userName, String passWord) {
+		for (int i = 0; i < user.length; i++) {
+			if (user[i] != null) {
+				if (userName.equals(user[i].getName()) && passWord.equals(user[i].getPassword())) {
+					return user[i];
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public String idshow(String name){
+		for(int i=0;i<10;i++){
+			if(user[i] != null){
+				if(user[i].getName().equals(name)  ){//登录判断，记录身份，用type保存
+					return user[i].getIdentity();
+				}
+			}else{
+				return "false";
+			}
+		}
+		return "false";
+	}
+/*	*//**
+	 * 添加成功之后登录,检查用户名密码
+	 * @param loginname
+	 * @param loginpassword
+	 * @param loginidentity
+	 * @return true登录成功，记录type ,false登录失败
+	 *//*
+	public  boolean loginCheck(String loginname,String loginpassword,String loginidentity){
+		user[0]=new User("admin","123","1");
+		
+		for(int i=0;i<10;i++){
+			if(user[i] != null){
+				if(user[i].getName().equals(loginname) && user[i].getPassword().equals(loginpassword) && loginidentity.equals(loginidentity)){//登录判断，记录身份，用type保存
+					
+					return true;
+				}
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}*/
+	/**
+	 * 显示所有用户名
+	 */
+	public void show(){
+		for(int i=0;i<10;i++){
+			user[0]=new User("admin","1","1");
+			if(user[i] != null){
+				System.out.println("第"+(i+1)+"个用户："+user[i].getName()+"身份为："+user[i].getIdentity());
+			}
+		}
+	}
+}
