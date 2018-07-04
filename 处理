@@ -1,0 +1,139 @@
+package com.example.serviceImpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.dao.Userdao;
+import com.example.model.User;
+import com.example.util.JDBCUtil;
+
+public class UserServiceImpl implements Userdao{
+
+	private Connection conn;
+	private ResultSet rs;
+	private Statement stmt;
+	private PreparedStatement psmt;
+
+
+	@Override
+	public List<User> getuserlist() {
+		// TODO Auto-generated method stub
+		List<User> list=new ArrayList<User>();
+		conn=JDBCUtil.getConnection();
+		String sql="SELECT USERNAME,PASSWORD,MAIL,DATETIME FROM CRM_USER";
+		try{
+			stmt=conn.createStatement();
+			rs=stmt.executeQuery(sql);
+			User user=null;
+			while(rs.next()){
+				user=new User();
+				user.setUsername(rs.getString("USERNAME"));
+				user.setPassword(rs.getString("PASSWORD"));
+				user.setMail(rs.getString("MAIL"));
+				user.setDatetime(rs.getString("DATETIME"));
+				list.add(user);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			JDBCUtil.close(conn, stmt, psmt, rs);
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public boolean deleteuser(String username) {
+		// TODO Auto-generated method stub
+		boolean flag=false;
+		conn=JDBCUtil.getConnection();
+		String sql="DELETE FROM CRM_USER WHERE USERNAME=?";
+		try {
+			stmt=conn.createStatement();
+			psmt=conn.prepareStatement(sql);
+			psmt.setString(1, username);
+			if(psmt.executeUpdate()==1){
+				flag=true;
+			}else{
+				flag=false;
+			}
+			psmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			JDBCUtil.close(conn, stmt, psmt, rs);
+		}
+		
+		return flag;
+	}
+
+
+	@Override
+	public boolean changeuser(String username, User user) {
+		// TODO Auto-generated method stub
+		boolean flag=false;
+		conn=JDBCUtil.getConnection();
+		String sql="UPDATE CRM_USER SET USERNAME=?,PASSWORD=?,MAIL=?,DATETIME=? WHERE USERNAME=?";
+		try {
+			stmt=conn.createStatement();
+			psmt=conn.prepareStatement(sql);
+			psmt.setString(1, user.getUsername());
+			psmt.setString(2, user.getPassword());
+			psmt.setString(3, user.getMail());
+			psmt.setString(4, user.getDatetime());
+			psmt.setString(5, username);
+			if(psmt.executeUpdate()==1){
+				flag=true;
+			}else{
+				flag=false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}finally{
+			JDBCUtil.close(conn, stmt, psmt, rs);
+		}
+		
+		return flag;
+	}
+
+
+	@Override
+	public boolean adduser(User user) {
+		// TODO Auto-generated method stub
+		boolean flag=false;
+		conn=JDBCUtil.getConnection();
+		String sql="INSERT INTO CRM_USER VALUES(?,?,?,?)";
+		try {
+			stmt=conn.createStatement();
+			psmt=conn.prepareStatement(sql);
+			psmt.setString(1, user.getUsername());
+			psmt.setString(2, user.getPassword());
+			psmt.setString(3, user.getMail());
+			psmt.setString(4, user.getDatetime());
+			if(psmt.executeUpdate()==1){
+				flag=true;
+			}else{
+				flag=false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}finally{
+			JDBCUtil.close(conn, stmt, psmt, rs);
+		}
+		return flag;
+	}
+
+	
+}
