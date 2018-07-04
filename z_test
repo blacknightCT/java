@@ -1,0 +1,193 @@
+package com.links.test;
+
+import java.util.Scanner;
+
+import com.links.model.*;
+import com.links.service.*;
+
+public abstract class Test {
+
+	public static Scanner sc = new Scanner(System.in);
+	public static Userservice us = new Userservice();
+	public static Goodsservice gs = new Goodsservice();
+	public static Shoppingservice ss = new Shoppingservice();
+	public static User user = new User();
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String username = "";
+		String password = "";
+		int a = 0;
+		boolean f = true;
+		while (f) {
+			System.out.println("请选择操作：1、注册      2、登录      3、查看所有用户     4、退出 ");
+			System.out.println("请输入操作编号：");
+			a = sc.nextInt();
+			switch (a) {
+			case 1:
+				System.out.println("请输入用户名：");
+				while (true) {
+					username = sc.next();
+					if (us.checkusername(username)) {
+						System.out.println("请输入密码：");
+						password = sc.next();
+						if (us.reguser(username, password)) {
+							System.out.println("注册成功！！");
+							break;
+						} else {
+							System.out.println("注册失败，请联系管理员！！");
+							break;
+						}
+					} else {
+						System.out.println("用户名重复，请重新输入用户名：");
+					}
+				}
+				break;
+			// *注册
+			case 2:
+				System.out.println("请输入用户名：");
+				username = sc.next();
+				System.out.println("请输入密码：");
+				password = sc.next();
+				user = us.login(username, password);
+				if (user != null) {
+					if (user.getType() == 1) {
+						System.out.println("欢迎管理员！！");
+						admin();
+					} else {
+						System.out.println("欢迎用户登录！！");
+						userjm();
+					}
+				} else {
+					System.out.println("登录失败，请重新登录！！");
+				}
+				break;
+			// *登录
+			case 3:
+				us.showuser();
+				break;
+			// *查看所有用户
+			case 4:
+				System.out.print("您已退出系统");
+				System.exit(0);
+				break;
+			// *退出
+			default:
+				System.out.print("请输入正确的操作编码！！");
+				break;
+			}
+		}
+	}
+
+	public static void admin() {
+		boolean f = false;
+		int a = 0;
+		String name = "";
+		double b;
+		while (!f) {
+			System.out.println("请选择操作：1、添加商品      2、查询商品     3、删除商品      4、显示所有商品      5、退出");
+			a = sc.nextInt();
+			switch (a) {
+			case 1:
+				System.out.println("请输入商品编码");
+				a = sc.nextInt();
+				if (gs.checknum(a)) {
+					System.out.println("该编码已有商品，请重新输入");
+					break;
+				} else {
+					System.out.println("请输入商品名称");
+					name = sc.next();
+					System.out.println("请输入商品价格");
+					b = sc.nextDouble();
+					Goods good=new Goods(a,name,b);
+					if (gs.addgoods(good)) {
+						System.out.println("添加成功！！");
+					} else {
+						System.out.println("添加失败！！");
+					}
+				}
+				break;
+			// *添加商品
+			case 2:
+				System.out.println("请输入商品名称");
+				name = sc.next();
+				gs.search(name);
+				break;
+			// *查询商品
+			case 3:
+				System.out.println("请输入商品编码");
+				a = sc.nextInt();
+				if (gs.checknum(a)) {
+					if (gs.deletegoods(a)) {
+						System.out.println("成功删除该商品！！");
+					} else {
+						System.out.println("删除失败！！");
+					}
+				} else {
+					System.out.println("商品编码不存在！！");
+				}
+				break;
+			// *删除商品
+			case 4:
+				gs.showall();
+				break;
+			// *显示所有商品
+			case 5:
+				System.out.println("您已退出！！");
+				f = true;
+				break;
+			// *退出
+			default:
+				System.out.print("请输入正确的操作编码！！");
+				break;
+			}
+		}
+	}
+
+	public static void userjm() {
+		boolean f = false;
+		int a = 0;
+		String name = "";
+		while (!f) {
+			System.out.println("请选择操作：1、显示所有商品      2、查询商品     3、加入购物车      4、我的购物车      5、退出");
+			a = sc.nextInt();
+			switch (a) {
+			case 1:
+				gs.showall();
+				break;
+			// *显示所有商品
+			case 2:
+				System.out.println("请输入商品名称");
+				name = sc.next();
+				gs.search(name);
+				break;
+			// *查询商品
+			case 3:
+				System.out.println("请输入商品编号");
+				a = sc.nextInt();
+				name = user.getName();
+				if (ss.addshopping(name, a)) {
+					System.out.println("添加成功！！");
+				} else {
+					System.out.println("添加失败！！");
+				}
+				break;
+			// *加入购物车
+			case 4:
+				name = user.getName();
+				ss.showall(name);
+				break;
+			// *我的购物车
+			case 5:
+				System.out.println("您已退出！！");
+				f = true;
+				break;
+			// *退出
+			default:
+				System.out.print("请输入正确的操作编码！！");
+				break;
+			}
+		}
+	}
+
+}
