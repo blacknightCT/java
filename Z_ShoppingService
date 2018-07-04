@@ -1,0 +1,62 @@
+package com.links.service;
+
+import java.util.ArrayList;
+
+import com.links.model.Goods;
+import com.links.model.Shopping;
+import com.links.model.User;
+
+public class Shoppingservice {
+//	private static Shopping[] shopping=new Shopping[100];
+	private static ArrayList<Shopping> shopping=new ArrayList<Shopping>();
+	//*显示购物车内所有内容
+	public void showall(String name){
+//		for(int i=0;i<shopping.length;i++){
+//			if(shopping[i]==null){
+//				break;
+//			}else{
+//				if(name.equals(shopping[i].getName())){
+//					System.out.println("商品编号为"+shopping[i].getNum()+
+//							"商品名称为"+shopping[i].getGoodsname()+"商品价格为"+
+//							shopping[i].getPrice());
+//				}
+//			}
+//		}
+		for(int i=0;i<shopping.size();i++){
+			Shopping shop=new Shopping();
+			shop=shopping.get(i);
+			if(name.equals(shop.getName())){
+			System.out.println("商品编号为"+shop.getNum()+"商品名称为"
+			+shop.getName()+"商品价格为"+shop.getPrice());
+			}
+		}
+	}
+	//*添加商品
+	public boolean addshopping(String name,int num){
+//		Goodsservice gg=new Goodsservice();
+//		Goods g1=new Goods();
+//		if(gg.checknum(num)){
+//			g1=gg.getgoods(num);
+//			for(int i=0;i<shopping.length;i++){
+//				if(shopping[i]==null){
+//					shopping[i] = new Shopping(name,num,g1.getName(),g1.getPrice());
+//					return true;
+//				}
+//			}
+//		}
+//		else{
+//			System.out.println("商品编码错误！！");
+//			return false;
+//		}
+//	return false;
+		Goodsservice gg=new Goodsservice();
+     	Goods g1=new Goods();
+     	if(gg.checknum(num)){
+     		g1=gg.getgoods(num);
+         	Shopping s1=new Shopping(name,num,g1.getName(),g1.getPrice());
+         	shopping.add(s1);
+         	return true;
+     	}
+     	return false;
+	}
+}
