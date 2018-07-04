@@ -1,0 +1,85 @@
+package com.example.test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import com.example.dao.Userdao;
+import com.example.model.User;
+import com.example.serviceImpl.UserServiceImpl;
+import com.example.util.JDBCUtil;
+
+public class Test {
+
+	private static 	Userdao userdao=new UserServiceImpl();
+	public static Scanner sc=new Scanner(System.in);
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		int a;
+		String username;
+		User user1=new User();
+		while(true){
+			System.out.println("请选择操作编码：1、查询   2、删除     3、修改      4、插入");
+			a=sc.nextInt();
+			switch(a){
+			case 1:
+				List<User> list=new ArrayList<User>();
+				list=userdao.getuserlist();
+				for(User user:list){
+					System.out.println(user);
+				}
+				break;
+			case 2:
+				System.out.println("请输入删除用户姓名：");
+				username=sc.next();
+				if(userdao.deleteuser(username)){
+					System.out.println("删除成功！");
+				}else{
+					System.out.println("删除失败！");
+				}
+				break;
+			case 3:
+				System.out.println("请输入需要修改的用户名：");
+				username=sc.next();
+				System.out.println("请输入改动后的用户名：");
+				user1.setUsername(sc.next());
+				System.out.println("请输入改动后的密码：");
+				user1.setPassword(sc.next());
+				System.out.println("请输入改动后的邮箱：");
+				user1.setMail(sc.next());
+				System.out.println("请输入改动后的日期：");
+				user1.setDatetime(sc.next());
+				if(userdao.changeuser(username, user1)){
+					System.out.println("修改成功！");
+				}else{
+					System.out.println("修改失败！");
+				}
+				break;
+			case 4:
+				System.out.println("请输入用户名：");
+				user1.setUsername(sc.next());
+				System.out.println("请输入密码：");
+				user1.setPassword(sc.next());
+				System.out.println("请输入邮箱：");
+				user1.setMail(sc.next());
+				System.out.println("请输入日期：");
+				user1.setDatetime(sc.next());
+				if(userdao.adduser(user1)){
+					System.out.println("添加成功！");
+				}else{
+					System.out.println("添加失败！");
+				}
+				break;
+			default:
+				System.out.print("请输入正确的操作编码！！");
+				break;
+			}
+			
+		}
+
+	}
+
+}
