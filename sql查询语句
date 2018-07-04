@@ -1,0 +1,161 @@
+create table CLA1(
+       classid number(3) primary key,
+       subject varchar2(20) not null,
+       deptname varchar2(20),
+       enrolltime number(5) not null,
+       num number(10)
+);
+insert into CLA1 values('101','软件','计算机','1995','20');
+insert into CLA1 values('102','微电子','计算机','1996','30');
+insert into CLA1 values('103','微电子','计算机','1996','30');
+insert into CLA1 values('104','微电子','计算机','1996','30');
+insert into CLA1 values('105','微电子','计算机','1996','30');
+insert into CLA1 values('106','微电子','计算机','1996','30');
+
+update CLA1 set subject = 'ruanjian' where classid='101';
+
+select classid from CLA1 group by subject;
+select * from CLA1;
+--*--
+create table DE(
+       deptid number(3) primary key,
+       deptname varchar2(20) not null
+);
+
+select * from DE;
+
+--*--
+create table ST(
+       studentid number(4),
+       name varchar2(20) not null,
+       age number(10),
+       constraint s_name_ck check(age between 20 and 40),
+       classid number(3),
+       foreign key(classid) references CLA1(classid)
+);
+insert into ST values('1','1','20','106');
+select * from tb_emp;
+select * from tb_dept;
+
+select * from class;
+select * from student;
+select * from department;
+
+--1++
+select distinct dname  from tb_dept d,tb_emp e where d.depton=e.deptno; 
+--1+
+select dname 
+from tb_dept 
+where depton in (select deptno from tb_emp);
+--2--+
+select empno,ename 
+from tb_emp 
+where sal >(select sal from tb_emp where ename='zhangsan');
+select * from tb_emp;
+--3+
+--left join
+select dname,empno,ename,job,mgr,hiredate,sal,comm
+from tb_dept 
+left join tb_emp 
+on tb_dept.depton = tb_emp.deptno;
+--right join
+select deptno,empno,ename,job,mgr,hiredate,sal,comm
+from tb_emp
+right join tb_dept 
+on tb_dept.depton = tb_emp.deptno;
+
+--4+
+select ename,dname ,job
+from tb_emp e,tb_dept d 
+where job='clerk'
+and e.deptno = d.depton ;
+select * from tb_emp;
+--5+
+select job from tb_emp  group by job having min(sal)>1500; 
+
+select job 
+from tb_emp 
+group by job having min(sal)>1500;
+--6+
+select ename
+ from tb_emp e,tb_dept d 
+ where dname='sales' and e.deptno = d.depton;
+ 
+ select * from tb_dept;
+--7+
+select empno,ename 
+from tb_emp 
+where sal>(select avg(sal) from tb_emp);
+--8+
+select ename,empno,job
+from tb_emp 
+where job=(select job from tb_emp where ename = 'zhangsan');
+
+select * from tb_emp;
+--9+
+select ename,dname,sal+comm 
+from tb_emp e,tb_dept d 
+where e.deptno=d.depton;
+--10+
+select e.ename,e.job,d.ename,d.job,d.deptno 
+from tb_emp e,tb_emp d 
+where e.job=d.job and e.deptno <> d.deptno;
+
+select * from tb_emp;
+--11~
+
+select dname,d.depton,count(empno) 
+from tb_emp e,tb_dept d 
+where e.deptno=d.depton 
+group by d.depton,dname;
+--12+
+select min(sal),job 
+from tb_emp 
+group by job;
+
+
+select  sal ,job 
+from tb_emp 
+order by job ;
+
+--13+
+select deptno,min(sal) 
+from tb_emp 
+where job='manager' 
+group by deptno;
+
+
+--14
+select ename,sal*12+comm as salary 
+from tb_emp 
+order by salary ASC;
+--15
+select ename,empno,deptno,sal
+from (select ename,empno,deptno,sal 
+             from tb_emp 
+             order by sal DESC) 
+where rownum<= 10;
+--15
+delete from tb_dept where deptno not in (select distinct deptno from tb_emp);
+
+select * from tb_dept where depton not in (select distinct deptno from tb_emp);
+
+select distinct dname  from tb_dept d,tb_emp e where d.depton=e.deptno;  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
