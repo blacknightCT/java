@@ -1,0 +1,77 @@
+package com.links.service;
+
+import java.util.ArrayList;
+
+
+import com.links.model.User;
+public class Userservice {
+//	private static User[] user=new User[10];
+	private static ArrayList<User> user=new ArrayList<User>();
+	public Userservice(){
+		 User admin=new User("admin","111",1);
+		 user.add(admin);
+		 user.set(0, admin);
+	}
+	public boolean checkusername(String name){
+//		for(int i=0;i<user.length;i++){
+//			if(user[i]==null){
+//				break;
+//				}else{
+//					if(name.equals(user[i].getName())){
+//						return false;
+//					}
+//				}
+//		}
+		for(int i=0;i<user.size();i++){
+			if(name.equals(user.get(i).getName())){
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean reguser(String name,String password){
+//		for(int i=0;i<user.length;i++){
+//			if(user[i]==null){
+//				user[i]=new User(name,password,2);
+//				return true;
+//			}
+//		}
+		User user1=new User(name,password,2);
+		if(user.add(user1)){
+		return true;
+		}
+		else{
+			return false;
+		}
+	}
+	public User login(String name,String password){
+//		for(int i=0;i<user.length;i++){
+//			if(user[i]==null){
+//				break;
+//			}else{
+//				if(name.equals(user[i].getName())&&password.equals(user[i].getPassword())){
+//					return user[i];
+//				}
+//			}
+//		}
+//		return null;
+		for(int i=0;i<user.size();i++){
+			if(name.equals(user.get(i).getName())&&password.equals(user.get(i).getPassword())){
+				return user.get(i);
+			}
+		}
+		return null;
+	}
+	public void showuser(){
+//		for(int i=0;i<user.length;i++){
+//			if(user[i]==null){
+//				break;
+//			}else{
+//				System.out.println("编号："+(i+1)+user[i]);
+//			}
+//	}
+		for(int i=0;i<user.size();i++){
+			System.out.println("编号："+(i+1)+"用户名为"+user.get(i).getName()+"密码为"+user.get(i).getPassword());
+		}
+	}
+}
