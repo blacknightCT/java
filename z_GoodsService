@@ -1,0 +1,138 @@
+package com.links.service;
+
+
+import java.util.ArrayList;
+
+import com.links.model.Goods;
+public class Goodsservice {
+//	private static Goods[] goods=new Goods[20];
+	private static ArrayList<Goods> goods=new ArrayList<Goods>();
+	
+	//*检查商品编码是否存在
+		public boolean checknum(int num){
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					break;
+//				}else{
+//					if(num==goods[i].getNum()){
+//						return true;
+//					}
+//				}
+//			}
+			for(int i=0;i<goods.size();i++){
+				if(num==goods.get(i).getNum()){
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		//*添加商品
+		public boolean addgoods(Goods good){
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					goods[i]=new Goods(num,name,price);
+//					return true;
+//				}
+//			}
+		    if(goods.add(good)){
+			return true;
+		    }
+		    else{
+		    	return false;
+		    }
+		}
+		//*显示所有商品
+		public void showall(){
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					break;
+//				}else{
+//					System.out.println("商品编号为"+goods[i].getNum()+
+//							"商品名称为"+goods[i].getName()+"商品价格为"+goods[i].getPrice());
+//				}
+//			}
+			for(int i=0;i<goods.size();i++){
+				Goods good=new Goods();
+				good=goods.get(i);
+				System.out.println("商品编号为"+good.getNum()+
+						"商品名称为"+good.getName()+"商品价格为"+good.getPrice());
+//						
+			}
+		}
+		//*删除商品
+		public boolean deletegoods(int num){
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					System.out.println("找不到该商品！！");
+//					break;
+//				}else{
+//					if(num==goods[i].getNum()){
+//						for(int j=i;j<goods.length;j++){
+//							if(goods[j+1]==null){
+//								goods[j]=null;
+//								break;
+//							}else{
+//							goods[j]=goods[j+1];}
+//						}
+//						return true;
+//					}
+//				}
+//			}
+			for(int i=0;i<goods.size();i++){
+				if(num==goods.get(i).getNum()){
+					goods.remove(i);
+//					for(int j=i;j<goods.size();j++){
+//						Goods g1=new Goods();
+//						int x=0;
+//						x=j+1;
+//						g1=goods.get(x);
+//						goods.set(j, g1);
+//					}
+					return true;
+				}
+			}
+			return false;
+		}
+		//*根据商品名称搜索商品
+		public void search(String name){
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					break;
+//				}else{
+//					if(name.equals(goods[i].getName())){
+//						System.out.println("商品编号为"+goods[i].getNum()+
+//								"商品名称为"+goods[i].getName()+"商品价格为"+goods[i].getPrice());
+//					}
+//				}
+//			}
+			for(int i=0;i<goods.size();i++){
+				if(name.equals(goods.get(i).getName())){
+					Goods good=new Goods();
+					good=goods.get(i);
+					System.out.println("商品编号为"+good.getNum()+"商品名称为"
+					+good.getName()+"商品价格为"+good.getPrice());
+				}
+			}
+		}
+
+		
+		public Goods getgoods(int num) {
+			// TODO Auto-generated method stub
+//			for(int i=0;i<goods.length;i++){
+//				if(goods[i]==null){
+//					break;
+//				}else{
+//					if(num==goods[i].getNum()){
+//						return goods[i];
+//					}
+//				}
+//		}
+			for(int i=0;i<goods.size();i++){
+				if(num==goods.get(i).getNum()){
+					return goods.get(i);
+				}
+			}
+			return null;
+		}
+}
