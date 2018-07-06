@@ -1,0 +1,42 @@
+Goods[] result = new Goods[100];
+	public boolean checkname(String name) {
+		
+		int index = 0;
+		for (int i = 0; i < goods.length; i++) {
+			if (goods[i] != null) {
+				int tag = 0;// 索引，出现的位置
+				tag = name.indexOf(goods[i].getGoodsName());// 电脑 联想电脑
+				if (tag > -1) {
+					result[index] = goods[i];
+					index++;
+					return true;
+				} else {
+					System.out.println("找不到该名称的商品");
+					return false;
+				}
+			} else {
+				System.out.println("无商品");
+				return false;
+			}
+		}
+		return false;
+		
+	}
+
+	public void shows(){
+		for (int j = 0; j < 100; j++) {
+			if (result != null) {
+				System.out.println("  【 商品编号 】  ：" + result[j].getNum() + "  【 商品名称 】  ："
+						+ result[j].getGoodsName() + "  【 价格 】  ：" + result[j].getPrice());
+			}
+		}
+	}
+  
+  
+  test----------------------------------------------------
+  System.out.println("商品搜索");
+								System.out.println("输入要搜索的商品名称："); 
+								printgoods_name=sc.next();
+								if(gs.checkname(printgoods_name)){
+									gs.show();
+								} 
