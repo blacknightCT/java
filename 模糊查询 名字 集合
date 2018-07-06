@@ -1,0 +1,22 @@
+public Goods[] getGoodsByGoodName(String goodName) {
+		Goods[] goodInfo = new Goods[100];
+		int index = 0;
+		for (int i = 0; i < list.size(); i++) {
+			if (list != null && list.get(i).getGoodName().indexOf(goodName) > -1) {
+				goodInfo[index] = list.get(i);
+				index++;
+			}
+		}
+		return goodInfo;//返回数组
+	}
+  
+  test----------------------------------------------------
+  
+  System.out.println("请输入商品的名称（模糊查询）：");
+				Goods[] goodInfo=goodsService.getGoodsByGoodName(sc.next());//定义数组接收
+				System.out.println("查询出的商品信息如下：");
+				for (Goods item : goodInfo) {
+					if(item!=null){
+						System.out.println(item);
+					}
+				}
