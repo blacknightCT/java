@@ -1,0 +1,26 @@
+case "delete":
+				if(request.getParameter("userName")!= null){
+        
+					boolean userD = new UserDaoImpl().deleteUserByUserName(request.getParameter("userName"));//判断删除
+					if (userD) {
+						response.getWriter().print(
+            
+            这个跳转可以说是非常厉害了~！~！~！。。。真的是单一的跳转，比较直接。格式很重要。
+            
+								"<script>
+                alert('删除成功');
+                window.location.href='UserServlet?
+                tag=select&userName=';
+                </script>"
+								);
+					}
+				}
+				break;
+        
+        
+ <td>
+ <a onclick="return confirm('确认删除？');"
+    href="UserServlet?
+    tag=delete&userName=<%=user.getName()%>">
+    删除
+ </a> 
