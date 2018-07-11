@@ -1,0 +1,30 @@
+	<a href="UserServlet?tag=editUser&userName=<%=user.getName()%>">修改</a>
+  
+  case "editUser"://根据名字查找所有信息，到update去实现修改
+  
+				String userName11 =request.getParameter("userName");
+					User userInfo1 = new UserDaoImpl().getUserByName(userName11);
+					
+					request.setAttribute("userInfo", userInfo1);
+					request.getRequestDispatcher("editUser.jsp").forward(request, response);
+				break;
+        
+        
+			case "update"://输入的新值，通过表单，提交到这来处理<input type="hidden" value="update" name="tag">
+      
+				User user1 = new User();
+					user1.setName(request.getParameter("userName"));
+					user1.setPassword(request.getParameter("passWord"));
+					user1.setMail(request.getParameter("mail"));
+					user1.setDatetime(request.getParameter("dateTime"));
+				boolean type = new UserDaoImpl().updateUser(user1);
+				if(type){
+					response.getWriter().print(
+							"<script>alert('修改成功');window.location.href='UserServlet?tag=select&userName=';</script>"
+							);
+				}else{
+					response.getWriter().print(
+							"<script>alert('修改失败');window.history.go(-1);</script>"
+							);
+				}
+				break;
