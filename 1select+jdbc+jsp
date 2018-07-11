@@ -1,0 +1,38 @@
+	<form action="UserServlet" method="get">
+		查询条件：<input type="text" placeholder="输入用户名模糊查询。。" name="userName">
+		<input type="submit" value="搜索">
+		<input type="hidden" value="select" name="tag"> <!-- form表单内部用tag接收各种操作的值 -->
+    
+    
+    这里的userName，就是传递的用户界面的值，到数据库，给一个隐藏域，将这个地方提交时，type为select；
+    
+    case "select":
+				String userName="";
+				if(request.getParameter("userName")!= null){
+        获取用户输入的 要搜索的 名字；
+					userName=request.getParameter("userName");
+				}
+        定义一个集合来存储 输出显示；
+				List<User> list= new ArrayList<User>();
+				
+        如果没有输入要搜索的，就显示所有用户
+				if("".equals(userName)){
+					list = new UserDaoImpl().getuserList();
+          
+          另外一种方式：（定义一个对象来调用方法，跟他自己new出来一个调用，是一样的）
+          UserDaoImpl us=new UserDaoImpl();
+					list=us.getuserList();
+          
+				}else{
+        否则显示要搜索的那个信息
+					list = new UserDaoImpl().getuserList(userName);
+				}
+        
+        把刚才的list的值放到userlist里面
+        
+				request.setAttribute("userList", list);
+        
+        转发 到 Userlist.jsp界面
+				request.getRequestDispatcher("Userlist.jsp").forward(request, response);
+				
+				break;
