@@ -1,0 +1,105 @@
+public  List<User> get(String username){
+  conn = JDBCutil.getConnection();
+  String sql = "SELECT * FROM USER WHERE NAME ?";
+  -------------------------------------------------------------------------
+  psmt = conn.Preparestament(sql);
+  psmt.setString(1,username);
+  rs = psmt.executeQuery();
+ -------------------------------------------------------------------------  
+  User user = null;
+  while(rs.next()){
+      user = new User();
+      user.setName(rs.getString("NAME"));
+      
+      list.add(user);
+   }
+}
+
+public  List<User> get(){
+  conn = JDBCutil.getConnection();
+  String sql = "SELECT * FROM USER ";
+   -------------------------------------------------------------------------
+  stmt = conn.Createstatement();
+  rs = stmt.executeQuery(sql);
+   -------------------------------------------------------------------------
+  User user = null;
+  while(rs.next()){
+      user = new User();
+      user.setName(rs.getString("NAME"));
+      
+      list.add(user);
+   }
+}
+ -------------------------------------------------------------------------
+ -------------------------------------------------------------------------
+public List<User> getuserList(String userName) {
+		// TODO Auto-generated method stub
+		List<User> list = new ArrayList<User>();
+		
+		//1.连接数据库
+		conn = JDBCutil.getConnection();
+		//2.编译sql
+		String sql="SELECT NAME,PASSWORD,MAIL,DATETIME FROM USERUSER WHERE NAME LIKE ?";
+		
+		try {
+			//3 获取连接对象中的statement对象，用于编译sql 
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, "%"+userName+"%");
+			//获取查询的结果集
+			rs = psmt.executeQuery();
+			//4  存储结果集
+			User user=null;
+			while(rs.next()){
+				user=new User();//每一条数据都是单独的一组用户信息（用户对象）
+				user.setName(rs.getString("NAME"));//获取rs结果集中的每一列数据，以列名访问
+				user.setPassword(rs.getString("PASSWORD"));
+				user.setMail(rs.getString("MAIL"));
+				user.setDatetime(rs.getString("DATETIME"));
+				//将上述存储的user对象，添加到list集合中
+				list.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCutil.close(conn, stmt, psmt, rs);
+		}
+		return list;
+	}
+   -------------------------------------------------------------------------
+   -------------------------------------------------------------------------
+  	public List<User> getuserList() {
+		// TODO Auto-generated method stub
+		List<User> list = new ArrayList<User>();
+		
+		//1.连接数据库
+		conn = JDBCutil.getConnection();
+		//2.编译sql
+		String sql="SELECT NAME,PASSWORD,MAIL,DATETIME,TYPE FROM USERUSER";
+		
+		try {
+			//3 获取连接对象中的statement对象，用于编译sql 
+			stmt = conn.createStatement();
+			//获取查询的结果集
+			rs = stmt.executeQuery(sql);
+			//4  存储结果集
+			User user=null;
+			while(rs.next()){
+				user=new User();//每一条数据都是单独的一组用户信息（用户对象）
+				user.setName(rs.getString("NAME"));//获取rs结果集中的每一列数据，以列名访问
+				user.setPassword(rs.getString("PASSWORD"));
+				user.setMail(rs.getString("MAIL"));
+				user.setDatetime(rs.getString("DATETIME"));
+				user.setType(rs.getInt("TYPE"));
+				//将上述存储的user对象，添加到list集合中
+				list.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCutil.close(conn, stmt, psmt, rs);
+		}
+		return list;
+	}
+	
