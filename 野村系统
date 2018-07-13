@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="jquery-1.7.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//*密码
+		$("#userPwd2").change(function(){
+			if($(this).val() != $("#userPwd1").val()){
+				alert("两次密码不一样");
+			}
+		});
+		//*趣味 无 <input type="checkbox" name="hobby" value="唱歌">唱歌
+		$("[name=hobby]").click(function(){
+			if($(this).val()=='无'){
+				$("[name=hobby]").each(function(index,obj){
+					//*选了无，就把每一个状态变为非选中，只留无选中 
+					//去除 除了无选择项的状态，为false
+					if(index!= "4"){
+						//去除checkbox的选择状态，attr checked
+						$(obj).removeAttr('checked');
+					}
+				});
+			}else{
+				//选择其他的趣味的情况下，去除“无”checkbox的状态
+				$("#chkNone").removeAttr('checked');
+			}
+		});
+		
+		$("#state").change(function(){
+			$("#tr1").hide();
+			$("#tr2").hide();
+			if($(this).val()=="2"){
+				$("#tr1").show();
+			}else if($(this).val()=="3"){
+				$("#tr2").show();
+			}
+		});
+	});
+
+	function save(){
+		var userName=$("#userName").val();
+		var sex=$("[name=sex]:checked").val()==1?'男':'女';
+		var hobbys='';
+		$("[name=hobby]:checked").each(function(index,obj){
+			//判断是否被选中 prop 获取属性状态
+			hobbys+=$(obj).val()+',';
+		});
+		
+		if(hobbys!=''){
+			hobbys=hobbys.substring(0,hobbys.length-1);
+		}
+		var state=$("#state").val();
+		var outAddress='';
+		var remark='';
+		var msgState='';
+		if(state==2){
+			outAddress=$("#outAddress").val();
+			msgState='・出差目的地 :'+$("#outAddress").val();
+		}
+		if(state==3){
+			remark=$("#remark").val();
+			msgState='・离职备注 :'+$("#remark").val();
+		}
+		
+		if(userName==''){
+			alert('名前必须入力！');
+			$("#userName").focus();
+			isOK=false;
+			return false;
+		}
+		if(hobbys==''){
+			alert('请选择趣味');
+			isOK=false;
+			return false;
+		}
+		var msg='・名　　　前:'+userName+'\n'+
+		'・性　　　別:'+sex+'\n'+
+		'・趣　　　味:'+hobbys+'\n'+
+		'・状　　　态:'+(state==1?'在职':(state==2?'出差':'离职'))+'\n'+
+		msgState;
+		alert(msg);
+		return false;//此处正常情况下应该return true的，由于form 中的action现在无需发送请求跳转，所以置为false
+	}
+</script>
+<style type="text/css">
+	#btnSave{
+		height: 28px;
+		background-color: yellow;
+	}
+	
+	label{
+		color: red;
+	}
+</style>
+</head>
+<body>
+<form action="" method="post" onsubmit="return save();">
+	<table>
+		<tr>
+			<td>・名　　　前<label>(*)</label></td>
+			<td>
+				<input type="text" maxlength="30" id="userName">
+			</td>
+		</tr>
+		<tr>
+			<td>・出身年月<label>(*)</label></td>
+			<td>
+				<input type="date" id="userDate" style="width: 168px;">
+			</td>
+		</tr>
+		<tr>
+			<td>・密　　　码<label>(*)</label></td>
+			<td>
+				<input type="password" id="userPwd1" style="width: 168px;">
+			</td>
+		</tr>
+		<tr>
+			<td>・确认密码<label>(*)</label></td>
+			<td>
+				<input type="password" id="userPwd2" style="width: 168px;">
+			</td>
+		</tr>
+		<tr>
+			<td>・性　　　别<label>(*)</label></td>
+			<td>
+				<input type="radio" name="sex" checked="checked" value="1">男
+				<input type="radio" name="sex" value="2">女
+			</td>
+		</tr>
+		<tr>
+			<td>・住　　　所<label>(*)</label></td>
+			<td>
+				<select id="address" style="width: 168px;">
+					<option value="">--请选择住所--</option>
+					<option value="北京">北京</option>
+					<option value="上海">上海</option>
+					<option value="广州">广州</option>
+					<option value="江苏">江苏</option>
+					<option value="浙江">浙江</option>
+					<option value="安徽">安徽</option>
+					<option value="天津">天津</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>・邮　　　箱<label>(*)</label></td>
+			<td>
+				<input type="text" id="email">
+			</td>
+		</tr>
+		<tr>
+			<td>・趣　　　味<label>(*)</label></td>
+			<td>
+				<input type="checkbox" name="hobby" value="唱歌">唱歌
+				<input type="checkbox" name="hobby" value="跳舞">跳舞<br/>
+				<input type="checkbox" name="hobby" value="運動">運動
+				<input type="checkbox" name="hobby" value="旅游">旅游<br/>
+				<input type="checkbox" name="hobby" id="chkNone" value="无">无
+			</td>
+		</tr>
+		<tr>
+			<td>・状　　　态<label>(*)</label></td>
+			<td>
+				<select id="state" style="width: 168px;">
+					<option value="1">在职</option>
+					<option value="2">出差</option>
+					<option value="3">离职</option>
+				</select>
+			</td>
+		</tr>
+		<tr id="tr1" style="display: none;">
+			<td>・出差目的地 <label>(*)</label></td>
+			<td>
+				<input type="text" id="outAddress" maxlength="50">
+			</td>
+		</tr>
+		<tr id="tr2" style="display: none;">
+			<td>・离职备注<label>(*)</label></td>
+			<td>
+				<textarea rows="" cols="" id="remark" maxlength="250"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="reset" value="清    空">
+			</td>
+			<td>
+				<input id="btnSave" type="submit" value="提     交">
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
