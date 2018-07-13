@@ -1,0 +1,77 @@
+
+<table>
+		<tr align="right">
+			<form action="demoServlet" method="GET">
+				<td>
+					<input type="file" name="file" /> 
+					<input type="hidden" value="read" name="tag">
+					 <input type="submit" value="读取" />
+				 </td>
+			</form>
+		</tr>
+
+    ----------------------------------------------------------------------------------------------------------------
+		<form action="demoServlet" method="GET">
+		<tr>
+			<td>
+				<%
+					String text = "";
+					if (!"".equals(request.getAttribute("filetext"))) {//接收到读取的文件里的值不为空时
+						text = (String) request.getAttribute("filetext");//将值读出来存到text里显示
+					}
+					if (!"".equals(text)) {
+				%> 
+				<textarea rows="20" cols="70" name="textarea" ><%=text%></textarea> 
+				<%}%>
+			</td>
+		</tr>
+    ----------------------------------------------------------------------------------------------------------------
+		<tr align="right">
+			<td>
+			<input type="hidden" value="write" name="tag">
+			<input type="submit" value="写入" />
+			
+			</td>
+		</tr>
+		</form>
+	</table>
+    ----------------------------------------------------------------------------------------------------------------
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String tag = request.getParameter("tag");// 首先找到tag标记的值
+		if (tag != null) {
+			switch (tag) {
+			case "read":
+				String filenameS = request.getParameter("file");//接收文件名放到filenameS里面
+				if (!"".equals(filenameS)) {//不为空时，进行读
+					BufferedReader fBufferedReader = null;
+					fBufferedReader = new BufferedReader(new FileReader(filenameS));//去读名字为filenameS的文件
+					String text = "";//接收读的值
+					while ((text = fBufferedReader.readLine()) != null) {//读到的值不为空时
+						request.setAttribute("filetext", text);// 内容放到filetext，传到jsp显示
+						request.getSession().setAttribute("fileSession", filenameS);// 文件名存在session里面，取名为filesession
+					}
+					fBufferedReader.close();
+					request.getRequestDispatcher("demo.jsp").forward(request, response);//转发（前后页面共用request，并且需要传值）
+				} else {
+					request.getRequestDispatcher("demo.jsp").forward(request, response);//重定向（不是共用request，不要值传递）
+				}
+				break;
+    ----------------------------------------------------------------------------------------------------------------
+			case "write":
+				String filename1 = (String) request.getSession().getAttribute("fileSession");//读取上面session保存的文件名
+				String writetext = request.getParameter("textarea");//保存新写入的textarea
+				FileWriter fileWriter = null;//new一个
+				if (!"".equals(filename1)) {
+					fileWriter = new FileWriter(filename1);//接收文件名，接下来的写入是对此名称的文件进行的
+					fileWriter.write(writetext);//将值写进去
+					fileWriter.close();
+					request.getSession().setAttribute("fileSession", null);
+					request.getRequestDispatcher("demo.jsp").forward(request, response);
+				}
+				break;
+			}
+
+		}
+
+	}
