@@ -1,0 +1,22 @@
+首先我们要知道：
+
+(1)request.getRequestDispatcher()是请求转发，前后页面共享一个request ; 这个是在服务端运行的，对浏览器来说是透明的。
+(2)response.sendRedirect()是重新定向，前后页面不是一个request。而这个是在浏览器端运行的。
+
+      1) redirect 方式
+　　 response.sendRedirect("/a.jsp");
+　　 页面的路径是相对路径。sendRedirect可以将页面跳转到任何页面，不一定局限于本web应用中，如：
+　　 response.sendRedirect("URL");
+　　 跳转后浏览器地址栏变化。
+　　 这种方式要传值出去的话，只能在url中带parameter或者放在session中，无法使用request.setAttribute来 传递。所以该方式只适用于无传值跳转
+　　2) forward方式
+　　 request.getRequestDispatcher("/路径（可以是jsp路径也可以是servlet）") .forward(request, response);
+
+如：
+
+request.getRequestDispatcher("/2.jsp）") .forward(request, response);
+
+request.getRequestDispatcher("/servlet/HomeServlet）") .forward(request, response);
+　　Servlet页面跳转的路径是相对路径。forward方式只能跳转到本web应用中的页面上。
+　　跳转后浏览器地址栏不会变化。
+　　使用这种方式跳转，传值可以使用三种方法：url中带parameter，session，request.setAttribute
