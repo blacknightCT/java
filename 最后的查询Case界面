@@ -1,0 +1,100 @@
+package servlet;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.UserDaoImpl;
+import model.User;
+
+/**
+ * Servlet implementation class UserServlet
+ */
+public class UserServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       UserDaoImpl udi = new UserDaoImpl();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public UserServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		// TODO Auto-generated method stub
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
+		User user = new User();
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		String tag = request.getParameter("tag");
+		if (tag != null) {
+			switch (tag) {
+			case "select":
+				String name = "";
+				if (request.getParameter("username") != null) {
+					name = request.getParameter("username");
+				}
+				List<User> list = new ArrayList<>();
+				if ("".equals(name)) {
+					list = udi.selectAll();
+					
+				} else {
+					list = udi.getUserList(name);
+				}
+				request.setAttribute("UserList", list);
+				request.getRequestDispatcher("Check.jsp").forward(request, response);
+				break;
+			case "delete":
+				if (request.getParameter("username") != null) {
+					udi.delectByUsername(request.getParameter("username"));
+					response.getWriter().print(
+							"<script>alert('删除成功');window.location='UserServlet?tag=select&username=';</script>");
+				}
+				break;
+			case "get":
+				String username="";
+				username=request.getParameter("userName");
+				User user1=new User();
+				user1=udi.getUserByName(username);
+				request.setAttribute("Uname", username);
+				request.setAttribute("user", user);
+				request.getRequestDispatcher("update.jsp").forward(request, response);	
+				break;
+			case "update":
+				String username1="";
+				String score="";
+				username1=request.getParameter("username");
+				score=request.getParameter("score");
+				if(udi.updateUser(username1,score)){
+					response.getWriter().print("<script>alert('修改成功');window.location.href='Check.jsp'</script>");
+				}
+				else{
+					response.getWriter().print("<script>alert('修改失败');window.location.href='Check.jsp'</script>");
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
