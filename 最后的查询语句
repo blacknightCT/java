@@ -1,0 +1,149 @@
+package dao;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+
+import model.User;
+
+public class UserDaoImpl implements UserDao{
+	private Connection conn;
+	private Statement stmt;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	public List<User> selectAll() {
+		List<User> list = new ArrayList<User>();
+		conn = JdbcUtil.getConnection();
+		String sql = "select num,class,name,sco,bei from user1";
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			User user = null;
+			while (rs.next()) {
+				user = new User(rs.getString("num"),rs.getString("class"),rs.getString("name"),rs.getString("sco"),rs.getString("bei"));
+				list.add(user);
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return null;
+	}
+
+	public List<User> getUserList(String username) {
+		List<User> list = new ArrayList<User>();
+		conn = JdbcUtil.getConnection();
+		String sql = "select num,class,name,sco,bei from user1 where name like ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,"%"+username+"%");
+			rs = pstmt.executeQuery();
+			User user = null;
+			while (rs.next()) {
+				user = new User(rs.getString("num"),rs.getString("class"),rs.getString("name"),rs.getString("sco"),rs.getString("bei"));
+				list.add(user);
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return null;
+	}
+	
+
+	public boolean delectByUsername(String username) {
+		conn = JdbcUtil.getConnection();
+		try {
+			pstmt = conn.prepareStatement("delete from user1 where name = ?");
+			pstmt.setString(1,username);
+			int rows = pstmt.executeUpdate();
+			return rows>0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return false;
+	}
+
+
+	public boolean updateUser(User user, String nameString) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean updateUser( String name ,String sco) {
+		conn = JdbcUtil.getConnection();
+		String sql = "update user1 set sco=? where name=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, sco);
+			pstmt.setString(2, name);
+			int rows = pstmt.executeUpdate();
+			return rows>0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return false;
+	}
+	@Override
+	public String showScoByName(String username) {
+		User user = null;
+		conn = JdbcUtil.getConnection();
+		String sql = "select sco from suser1 where username =?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,username);
+			rs = pstmt.executeQuery();
+				user.setGrade(rs.getString("sco"));
+				return user.getGrade();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return null;
+		
+	}
+
+	public User getUserByName(String name) {
+		List<User> list = new ArrayList<>();
+		conn = JdbcUtil.getConnection();
+		User user = null;
+		user = new User();
+		String sql = "SELECT name,sco from user1 where name=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				user = new User();
+				user.setName(rs.getString("name"));
+				user.setGrade(rs.getString("sco"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(conn, stmt, pstmt, rs);
+		}
+		return user;
+	}
+
+	
+
+}
